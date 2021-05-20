@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three Js Pilot</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="gltfloader.js"></script>
+    <script src="orbitcontrols.js"></script>
+</head>
+<body style="margin:0px">
+    <script>
+        let scene, camera, renderer;
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color("black");
+            camera = new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeight,1,5000);
+            camera.rotation.y = 50/180*Math.PI;
+            camera.position.x = 600;
+            camera.position.y = 500;
+            camera.position.z = 500;
+    
+            renderer = new THREE.WebGLRenderer({antialias:true});
+            renderer.setSize(window.innerWidth,window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+    
+    
+            controls = new THREE.OrbitControls(camera,renderer.domElement);
+            controls.addEventListener('change', renderer);
+            // hlight = new THREE.AmbientLight (0x404040,20);
+            //  scene.add(hlight);
+            directionalLight = new THREE.DirectionalLight(0xffffff,5);
+            directionalLight.position.set(100,100,0);
+            directionalLight2 = new THREE.DirectionalLight(0xffffff,5);
+            directionalLight2.position.set(100,100,0);
+            directionalLight.castShadow = false;
+            directionalLight2.castShadow = false;
+            directionalLight3 = new THREE.DirectionalLight(0xfffff,4);
+            directionalLight4 = new THREE.DirectionalLight(0xfffff,4);
+            directionalLight3.position.set(-100,-100,0);
+            directionalLight4.position.set(-100,-100,0);
+            directionalLight4.castShadow = false;
+            directionalLight3.castShadow = false;
+            scene.add(directionalLight);
+            scene.add(directionalLight2);
+            scene.add(directionalLight3);
+            scene.add(directionalLight4);
+            light = new THREE.PointLight(0xffffff,10);
+            light.position.set(0,300,500);
+            //scene.add(light);
+            light2 = new THREE.PointLight(0xffffff,10);
+            light2.position.set(500,100,0);
+            //scene.add(light2);
+            light3 = new THREE.PointLight(0xffffff,10);
+            light3.position.set(0,100,-500);
+            //scene.add(light3);
+            light4 = new THREE.PointLight(0xffffff,10);
+            light4.position.set(-500,300,500);
+            //scene.add(light4);
+    
+    
+    
+            let loader = new THREE.GLTFLoader();
+            loader.load('scene.gltf', function(gltf){
+                car = gltf.scene.children[0];
+                car.scale.set(120,120,120);
+                scene.add(gltf.scene);
+                animate();
+                
+            });
+        }
+        function animate() {
+            renderer.render(scene,camera);
+            requestAnimationFrame(animate);
+        }
+        init();
+    </script>
+</body>
+</html>
